@@ -1,0 +1,11 @@
+{
+    "name": "wongjn/lazy_image",
+    "description": "Adds formatters and theme functions for lazy images.",
+    "type": "drupal-module",
+    "authors": [
+        {
+            "name": "wongjn",
+            "role": "Developer"
+        }
+    ]
+}
