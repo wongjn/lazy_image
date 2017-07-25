@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and functions for lazy image module.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK() for image-formatter--lazy.html.twig.
+ */
+function lazy_image_preprocess_image_formatter__lazy(&$variables) {
+  $variables['image']['#theme'] .= '__lazy';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for image-style--lazy.html.twig.
+ */
+function lazy_image_preprocess_image_style__lazy(&$variables) {
+  $variables['image']['#theme'] .= '__lazy';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for image--lazy.html.twig.
+ */
+function lazy_image_preprocess_image__lazy(&$variables) {
+  foreach (['src', 'srcset'] as $attribute_name) {
+    if (isset($variables['attributes'][$attribute_name])) {
+      $variables['attributes']["lazy-$attribute_name"] = $variables['attributes'][$attribute_name];
+      unset($variables['attributes'][$attribute_name]);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for responsive-image--lazy.html.twig.
+ */
+function lazy_image_preprocess_responsive_image__lazy(&$variables) {
+  foreach ($variables['sources'] as $key => $value) {
+    if (isset($value->storage['srcset'])) {
+      $value->setAttribute('lazy-srcset', $value->storage['srcset']);
+      $value->removeAttribute('srcset');
+    }
+  }
+
+  $img = $variables['img_element'];
+
+  $variables['img_element']['#attributes']['lazy-src'] = $img['#uri'];
+  $variables['img_element']['#attributes']['lazy-srcset'] = $img['#attributes']['srcset'];
+  unset($variables['img_element']['#uri']);
+  unset($variables['img_element']['#attributes']['srcset']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for responsive-image-formatter--lazy.html.twig.
+ */
+function lazy_image_preprocess_responsive_image_formatter__lazy(&$variables) {
+  if (isset($variables['responsive_image']['#type'])) {
+    unset($variables['responsive_image']['#type']);
+    $variables['responsive_image']['#theme'] = 'responsive_image__lazy';
+  } else {
+    $variables['responsive_image']['#theme'] .= '__lazy';
+  }
+}
