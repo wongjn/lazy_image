@@ -73,7 +73,6 @@ class LazyImageFormatter extends ImageFormatter {
         'image' => $element,
       ];
     }
-    ksm($elements);
 
     return $elements;
   }
