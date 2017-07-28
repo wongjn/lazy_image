@@ -69,7 +69,7 @@ class LazyResponsiveImageFormatter extends ResponsiveImageFormatter {
     foreach($elements as $delta => $element) {
       $element['#item_attributes']['class'] = explode(' ', $this->getSetting('classes'));
       $elements[$delta] = [
-        '#type' => ['lazy_image'],
+        '#type' => 'lazy_image',
         'image' => $element,
       ];
     }
