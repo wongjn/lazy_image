@@ -58,7 +58,7 @@ class LazyImage extends RenderElement {
    *   The render array.
    */
   public static function preRenderImage($elements) {
-    foreach (Element::children($elements) as $key) {
+    foreach (Element::getVisibleChildren($elements) as $key) {
       $image_build = $elements[$key];
 
       if (isset($image_build['#theme']) && in_array($image_build['#theme'], self::$supportedThemables)) {
