@@ -31,7 +31,7 @@ class LazyImage extends RenderElement {
    *
    * @var string[]
    */
-  protected static $supported_themeables = [
+  protected static $supportedThemables = [
     'image',
     'image_style',
     'image_formatter',
@@ -61,10 +61,10 @@ class LazyImage extends RenderElement {
     foreach (Element::children($elements) as $key) {
       $image_build = $elements[$key];
 
-      if (isset($image_build['#theme']) && in_array($image_build['#theme'], self::$supported_themeables)) {
+      if (isset($image_build['#theme']) && in_array($image_build['#theme'], self::$supportedThemables)) {
         $elements[$key]['#theme'] .= '__lazy';
 
-        // No js fallback
+        // No js fallback.
         $elements["${key}_fallback"] = [
           '#type' => 'inline_template',
           '#template' => '<noscript>{{ image }}</noscript>',
@@ -75,4 +75,5 @@ class LazyImage extends RenderElement {
 
     return $elements;
   }
+
 }
