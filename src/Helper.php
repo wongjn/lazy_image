@@ -3,7 +3,7 @@
 namespace Drupal\lazy_image;
 
 /**
- * Utility class helper for the lazy_iamge module.
+ * Utility class helper for the lazy_image module.
  */
 class Helper {
 
@@ -15,11 +15,11 @@ class Helper {
   const CSS_CLASS = 'js-lazy-image';
 
   /**
-   * The list of themables that can be made lazy.
+   * The list of theme hooks that can be made lazy.
    *
    * @var string[]
    */
-  protected static $supportedThemables = [
+  protected static $supportedThemeHooks = [
     'image',
     'image_style',
     'image_formatter',
@@ -37,7 +37,7 @@ class Helper {
    *   The modified render array.
    */
   public static function lazyImageConvertPreRender(array $element) {
-    $compatible_themeable = isset($element['#theme']) && in_array($element['#theme'], self::$supportedThemables);
+    $compatible_themeable = isset($element['#theme']) && in_array($element['#theme'], self::$supportedThemeHooks);
     $already_processed = isset($element['#lazy_image_processed']);
 
     if ($compatible_themeable && !$already_processed) {
