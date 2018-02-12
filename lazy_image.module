@@ -25,10 +25,12 @@ function lazy_image_preprocess_image_style__lazy(&$variables) {
 function lazy_image_preprocess_image__lazy(&$variables) {
   foreach (['src', 'srcset'] as $attribute_name) {
     if (isset($variables['attributes'][$attribute_name])) {
-      $variables['attributes']["lazy-$attribute_name"] = $variables['attributes'][$attribute_name];
+      $variables['attributes']["data-lazy-$attribute_name"] = $variables['attributes'][$attribute_name];
       unset($variables['attributes'][$attribute_name]);
     }
   }
+
+  $variables['attributes']['class'][] = 'js-lazy-image';
 }
 
 /**
@@ -37,15 +39,16 @@ function lazy_image_preprocess_image__lazy(&$variables) {
 function lazy_image_preprocess_responsive_image__lazy(&$variables) {
   foreach ($variables['sources'] as $value) {
     if (isset($value->storage['srcset'])) {
-      $value->setAttribute('lazy-srcset', $value->storage['srcset']);
+      $value->setAttribute('data-lazy-srcset', $value->storage['srcset']);
       $value->removeAttribute('srcset');
     }
   }
 
   $img = $variables['img_element'];
 
-  $variables['img_element']['#attributes']['lazy-src'] = $img['#uri'];
-  $variables['img_element']['#attributes']['lazy-srcset'] = $img['#attributes']['srcset'];
+  $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
+  $variables['img_element']['#attributes']['data-lazy-srcset'] = $img['#attributes']['srcset'];
+  $variables['img_element']['#attributes']['class'][] = 'js-lazy-image';
   unset($variables['img_element']['#uri']);
   unset($variables['img_element']['#attributes']['srcset']);
 }
