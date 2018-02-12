@@ -2,10 +2,19 @@
 
 namespace Drupal\lazy_image;
 
+use Otamay\Potracio\Potracio;
+
 /**
  * Utility class helper for the lazy_iamge module.
  */
 class LazyImageHelper {
+
+  /**
+   * CSS class for JavaScript to hook into.
+   *
+   * @var string
+   */
+  const CSS_CLASS = 'js-lazy-image';
 
   /**
    * The list of themables that can be made lazy.

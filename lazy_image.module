@@ -5,6 +5,8 @@
  * Contains hooks and functions for lazy image module.
  */
 
+use Drupal\lazy_image\LazyImageHelper;
+
 /**
  * Implements hook_theme().
  */
@@ -12,6 +14,9 @@ function lazy_image_theme() {
   return [
     'lazy_image_wrapper' => [
       'render element' => 'element',
+    ],
+    'responsive_image__lazy' => [
+      'base hook' => 'responsive_image',
     ],
   ];
 }
@@ -65,21 +70,28 @@ function lazy_image_preprocess_image__lazy(&$variables) {
 /**
  * Implements hook_preprocess_HOOK() for responsive-image--lazy.html.twig.
  */
-function lazy_image_preprocess_responsive_image__lazy(&$variables) {
-  foreach ($variables['sources'] as $value) {
-    if (isset($value->storage['srcset'])) {
-      $value->setAttribute('data-lazy-srcset', $value->storage['srcset']);
-      $value->removeAttribute('srcset');
-    }
-  }
-
+function template_preprocess_responsive_image__lazy(&$variables) {
   $img = $variables['img_element'];
 
+  // If outputting image tag only:
+  if ($variables['output_image_tag']) {
+    $variables['img_element']['#attributes']['data-lazy-srcset'] = $variables['sources'][0]['srcset'];
+    $variables['img_element']['#attributes']['class'][] = LazyImageHelper::CSS_CLASS;
+    unset($variables['img_element']['#attributes']['srcset']);
+  }
+  else {
+    // Convert srcset attributes on source tags.
+    foreach ($variables['sources'] as $value) {
+      $value->setAttribute('data-lazy-srcset', $value['srcset']);
+      $value->removeAttribute('srcset');
+    }
+
+    // Add JS CSS hook-class to picture tag.
+    $variables['attributes']['class'][] = LazyImageHelper::CSS_CLASS;
+  }
+
   $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
-  $variables['img_element']['#attributes']['data-lazy-srcset'] = $img['#attributes']['srcset'];
-  $variables['img_element']['#attributes']['class'][] = 'js-lazy-image';
   unset($variables['img_element']['#uri']);
-  unset($variables['img_element']['#attributes']['srcset']);
 }
 
 /**
