@@ -2,7 +2,7 @@ name: Lazy Image
 description: Adds formatters and theme functions for lazy images.
 type: module
 core: 8.x
-version: 8.x-1.0
+version: 8.x-1.1
 dependencies:
   - image
   - responsive_image
