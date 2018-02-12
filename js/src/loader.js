@@ -66,10 +66,12 @@ import arrayFrom from 'core-js/library/fn/array/from';
    *   The IntersectionObserver that observed this intersection event.
    */
   function onIntersect(entries, selfObserver) {
-    entries.forEach((entry) => {
-      selfObserver.unobserve(entry.target);
-      load(entry.target);
-    });
+    entries
+      .filter(entry => entry.isIntersecting || entry.intersectionRatio > 0)
+      .forEach((entry) => {
+        selfObserver.unobserve(entry.target);
+        load(entry.target);
+      });
   }
 
   if ('IntersectionObserver' in window) {
