@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: lazy_placeholder_default
+label: 'Lazy Placeholder Default'
+effects:
+  d5dbac24-aef0-405e-b505-ac80ba182aa8:
+    uuid: d5dbac24-aef0-405e-b505-ac80ba182aa8
+    id: image_scale
+    weight: 0
+    data:
+      width: 10
+      height: 10
+      upscale: false

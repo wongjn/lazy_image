@@ -22,6 +22,19 @@ function lazy_image_theme() {
 }
 
 /**
+ * Implements hook_theme_registry_alter().
+ *
+ * Adds 'placeholder' variable to lazy image theme hooks.
+ */
+function lazy_image_theme_registry_alter(&$theme_registry) {
+  $theme_registry['responsive_image_formatter__lazy']['variables']['lazy_placeholder'] = '';
+  $theme_registry['responsive_image__lazy']['variables']['lazy_placeholder'] = '';
+  $theme_registry['image_formatter__lazy']['variables']['lazy_placeholder'] = '';
+  $theme_registry['image_style__lazy']['variables']['lazy_placeholder'] = '';
+  $theme_registry['image__lazy']['variables']['lazy_placeholder'] = '';
+}
+
+/**
  * Prepares variables for lazy image wrapper templates.
  *
  * Default template: lazy-image-wrappe.html.twig.
@@ -44,6 +57,7 @@ function template_preprocess_lazy_image_wrapper(array &$variables) {
  */
 function lazy_image_preprocess_image_formatter__lazy(&$variables) {
   $variables['image']['#theme'] .= '__lazy';
+  $variables['image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
 }
 
 /**
@@ -51,6 +65,7 @@ function lazy_image_preprocess_image_formatter__lazy(&$variables) {
  */
 function lazy_image_preprocess_image_style__lazy(&$variables) {
   $variables['image']['#theme'] .= '__lazy';
+  $variables['image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
 }
 
 /**
@@ -64,6 +79,7 @@ function lazy_image_preprocess_image__lazy(&$variables) {
     }
   }
 
+  $variables['attributes']['src'] = $variables['lazy_placeholder'];
   $variables['attributes']['class'][] = 'js-lazy-image';
 }
 
@@ -91,7 +107,7 @@ function template_preprocess_responsive_image__lazy(&$variables) {
   }
 
   $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
-  unset($variables['img_element']['#uri']);
+  $variables['img_element']['#uri'] = $variables['lazy_placeholder'];
 }
 
 /**
@@ -105,6 +121,8 @@ function lazy_image_preprocess_responsive_image_formatter__lazy(&$variables) {
   else {
     $variables['responsive_image']['#theme'] .= '__lazy';
   }
+
+  $variables['responsive_image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
 }
 
 /**

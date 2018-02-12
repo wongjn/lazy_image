@@ -7,8 +7,26 @@ use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Common method implementations for lazy image formatters.
+ *
+ * If the class is capable of injecting services from the container, it should
+ * inject the 'image_style' entity type storage from the 'entity_type.manager'
+ * service and assign it to $this->imageStyleStorage.
  */
 trait LazyImageFormatterTrait {
+
+  /**
+   * Gets the image style entity storage.
+   *
+   * @return \Drupal\image\ImageStyleStorageInterface
+   *   The image style entity storage.
+   */
+  protected function getImageStyleStorage() {
+    if (!$this->imageStyleStorage) {
+      $this->imageStyleStorage = \Drupal::service('entity_type.manager')->getStorage('image_style');
+    }
+
+    return $this->imageStyleStorage;
+  }
 
   /**
    * Defines the default settings for this plugin.
@@ -84,9 +102,16 @@ trait LazyImageFormatterTrait {
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = parent::viewElements($items, $langcode);
 
+    $placeholder_style = $this->getImageStyleStorage()->load('lazy_placeholder_default');
+
     foreach ($elements as $delta => $element) {
-      $element['#item_attributes']['class'] = explode(' ', $this->getSetting('classes'));
+      $elements[$delta]['#item_attributes']['class'] = explode(' ', $this->getSetting('classes'));
       $elements[$delta]['#pre_render'][] = ['Drupal\lazy_image\Helper', 'lazyImageConvertPreRender'];
+
+      if ($placeholder_style) {
+        $file_uri = $element['#item']->entity->getFileUri();
+        $elements[$delta]['#lazy_placeholder'] = $placeholder_style->buildUrl($file_uri);
+      }
     }
 
     return $elements;
