@@ -81,6 +81,7 @@ function lazy_image_preprocess_image__lazy(&$variables) {
 
   $variables['attributes']['src'] = $variables['lazy_placeholder'];
   $variables['attributes']['class'][] = 'js-lazy-image';
+  $variables['#attached']['library'][] = 'lazy_image/loader';
 }
 
 /**
@@ -108,6 +109,7 @@ function template_preprocess_responsive_image__lazy(&$variables) {
 
   $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
   $variables['img_element']['#uri'] = $variables['lazy_placeholder'];
+  $variables['#attached']['library'][] = 'lazy_image/loader';
 }
 
 /**
