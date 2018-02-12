@@ -35,7 +35,7 @@ function lazy_image_preprocess_image__lazy(&$variables) {
  * Implements hook_preprocess_HOOK() for responsive-image--lazy.html.twig.
  */
 function lazy_image_preprocess_responsive_image__lazy(&$variables) {
-  foreach ($variables['sources'] as $key => $value) {
+  foreach ($variables['sources'] as $value) {
     if (isset($value->storage['srcset'])) {
       $value->setAttribute('lazy-srcset', $value->storage['srcset']);
       $value->removeAttribute('srcset');
@@ -57,7 +57,8 @@ function lazy_image_preprocess_responsive_image_formatter__lazy(&$variables) {
   if (isset($variables['responsive_image']['#type'])) {
     unset($variables['responsive_image']['#type']);
     $variables['responsive_image']['#theme'] = 'responsive_image__lazy';
-  } else {
+  }
+  else {
     $variables['responsive_image']['#theme'] .= '__lazy';
   }
 }
