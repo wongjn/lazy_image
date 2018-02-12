@@ -1,0 +1,13 @@
+{
+  "name": "lazy_image",
+  "version": "1.0.0",
+  "description": "Build scripts for lazy_image module.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wongjn/lazy_image.git"
+  },
+  "author": "wongjn",
+  "license": "MIT",
+  "homepage": "https://github.com/wongjn/lazy_image#readme"
+}
