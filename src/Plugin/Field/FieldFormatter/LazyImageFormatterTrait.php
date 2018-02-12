@@ -86,9 +86,9 @@ trait LazyImageFormatterTrait {
 
     foreach ($elements as $delta => $element) {
       $element['#item_attributes']['class'] = explode(' ', $this->getSetting('classes'));
-      $elements[$delta] = [
-        '#type' => 'lazy_image',
-        'image' => $element,
+      $elements[$delta]['#pre_render'][] = [
+        'Drupal\lazy_image\LazyImageHelper',
+        'lazyImageConvertPreRender',
       ];
     }
 

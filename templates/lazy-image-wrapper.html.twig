@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a lazy image wrapper.
+ *
+ * Available variables:
+ * - image: The lazy-loading image.
+ * - no_js_fallback: Alternative image markup for when JS is not enabled on in
+ *   the browser.
+ *
+ * @see template_preprocess_lazy_image_wrapper()
+ *
+ * @ingroup themeable
+ */
+#}
+{% spaceless %}
+  {{ image }}
+
+  {% if no_js_fallback %}
+    <noscript>{{ no_js_fallback }}</noscript>
+  {% endif %}
+{% endspaceless %}
