@@ -75,7 +75,7 @@ import arrayFrom from 'core-js/library/fn/array/from';
   }
 
   if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(onIntersect, { rootMargin: '20px', threshold: 0.2 });
+    const observer = new IntersectionObserver(onIntersect, { rootMargin: '20px' });
 
     /**
      * Loads lazy images once they are near the viewport.
