@@ -2,12 +2,10 @@
 
 namespace Drupal\lazy_image;
 
-use Otamay\Potracio\Potracio;
-
 /**
  * Utility class helper for the lazy_iamge module.
  */
-class LazyImageHelper {
+class Helper {
 
   /**
    * CSS class for JavaScript to hook into.

@@ -5,7 +5,7 @@
  * Contains hooks and functions for lazy image module.
  */
 
-use Drupal\lazy_image\LazyImageHelper;
+use Drupal\lazy_image\Helper;
 
 /**
  * Implements hook_theme().
@@ -76,7 +76,7 @@ function template_preprocess_responsive_image__lazy(&$variables) {
   // If outputting image tag only:
   if ($variables['output_image_tag']) {
     $variables['img_element']['#attributes']['data-lazy-srcset'] = $variables['sources'][0]['srcset'];
-    $variables['img_element']['#attributes']['class'][] = LazyImageHelper::CSS_CLASS;
+    $variables['img_element']['#attributes']['class'][] = Helper::CSS_CLASS;
     unset($variables['img_element']['#attributes']['srcset']);
   }
   else {
@@ -87,7 +87,7 @@ function template_preprocess_responsive_image__lazy(&$variables) {
     }
 
     // Add JS CSS hook-class to picture tag.
-    $variables['attributes']['class'][] = LazyImageHelper::CSS_CLASS;
+    $variables['attributes']['class'][] = Helper::CSS_CLASS;
   }
 
   $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
