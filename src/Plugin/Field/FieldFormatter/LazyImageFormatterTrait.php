@@ -37,6 +37,7 @@ trait LazyImageFormatterTrait {
   public static function defaultSettings() {
     return [
       'classes' => '',
+      'lazy_placeholder_style' => 'lazy_placeholder_default',
     ] + parent::defaultSettings();
   }
 
@@ -58,8 +59,17 @@ trait LazyImageFormatterTrait {
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $elements = parent::settingsForm($form, $form_state);
 
+    $elements['lazy_placeholder_style'] = [
+      '#title' => $this->t('Placeholder image style'),
+      '#type' => 'select',
+      '#default_value' => $this->getSetting('lazy_placeholder_style'),
+      '#empty_option' => t('Disable'),
+      '#options' => image_style_options(FALSE),
+      '#description' => $this->t('The image style for the initial image placeholder before loading the full-sized image.'),
+    ];
+
     $elements['classes'] = [
-      '#title' => t('Classes'),
+      '#title' => $this->t('Classes'),
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('classes'),
       '#description' => $this->t('HTML classes to add to the &lt;img> element.')
@@ -84,6 +94,15 @@ trait LazyImageFormatterTrait {
       $summary[] = $this->t('Classes: @classes', ['@classes' => $classes]);
     }
 
+    $image_styles = image_style_options(FALSE);
+    // Unset possible 'No defined styles' option.
+    unset($image_styles['']);
+
+    $placeholder_setting = $this->getSetting('lazy_placeholder_style');
+    $style = isset($image_styles[$placeholder_setting]) ? $image_styles[$placeholder_setting] : $this->t('Disabled');
+
+    $summary[] = $this->t('Lazy placeholder style: @style', ['@style' => $style]);
+
     return $summary;
   }
 
@@ -102,7 +121,7 @@ trait LazyImageFormatterTrait {
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = parent::viewElements($items, $langcode);
 
-    $placeholder_style = $this->getImageStyleStorage()->load('lazy_placeholder_default');
+    $placeholder_style = $this->getImageStyleStorage()->load($this->getSetting('lazy_placeholder_style'));
 
     foreach ($elements as $delta => $element) {
       $elements[$delta]['#item_attributes']['class'] = explode(' ', $this->getSetting('classes'));
