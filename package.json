@@ -1,6 +1,5 @@
 {
   "name": "lazy_image",
-  "version": "1.0.0",
   "description": "Build scripts for lazy_image module.",
   "private": true,
   "repository": {
