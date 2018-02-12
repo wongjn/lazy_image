@@ -94,3 +94,17 @@ function lazy_image_preprocess_responsive_image_formatter__lazy(&$variables) {
     $variables['responsive_image']['#theme'] .= '__lazy';
   }
 }
+
+/**
+ * Implements hook_page_bottom().
+ *
+ * Adds noscript CSS to hide lazy images.
+ */
+function lazy_image_page_bottom(array &$page_bottom) {
+  $page_bottom['lazy_image_noscript'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'style',
+    '#value' => 'img[data-lazy-src],img[data-lazy-srcset]{display:none}',
+    '#noscript' => TRUE,
+  ];
+}
