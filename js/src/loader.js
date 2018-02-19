@@ -34,26 +34,23 @@ import arrayFrom from 'core-js/library/fn/array/from';
    *   The element to load.
    * @param {object} options
    *   Options for loading.
-   * @param {bool} [options.addLoadedClass=true]
-   *   Whether to add the loaded class to the given element.
+   * @param {bool} options._fromSelf
+   *   Internal flag for whether this call is from istself (for <picture> tags)
+   *   to avoid infinite recursion loop.
    */
-  function load(element, { addLoadedClass = true } = {}) {
-    // If picture element, load the children
-    if (element.tagName === 'PICTURE') {
-      arrayFrom(element.children).forEach(child => load(child, { addLoadedClass: false }));
-      element.classList.add(LOADED_CLASS);
-      return;
+  function load(element, { _fromSelf = false } = {}) {
+    // If part of picture element, load siblings
+    if (element.parentElement.tagName === 'PICTURE' && !_fromSelf) {
+      const picture = element.parentElement;
+      arrayFrom(picture.children).forEach(child => load(child, { _fromSelf: true }));
     }
-
-    // Copy `lazy-` prefixed attributes without the suffix to load the image.
-    arrayFrom(element.attributes)
-      .filter(attribute => attribute.name.indexOf('data-lazy-') === 0)
-      .forEach((attribute) => {
-        element.setAttribute(attribute.name.replace(/^data-lazy-/, ''), attribute.value);
-      });
-
-    if (addLoadedClass) {
-      element.classList.add(LOADED_CLASS);
+    else {
+      // Copy `lazy-` prefixed attributes without the suffix to load the image.
+      arrayFrom(element.attributes)
+        .filter(attribute => attribute.name.indexOf('data-lazy-') === 0)
+        .forEach((attribute) => {
+          element.setAttribute(attribute.name.replace(/^data-lazy-/, ''), attribute.value);
+        });
     }
   }
 

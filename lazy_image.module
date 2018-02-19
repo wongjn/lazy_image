@@ -15,9 +15,6 @@ function lazy_image_theme() {
     'lazy_image_wrapper' => [
       'render element' => 'element',
     ],
-    'responsive_image__lazy' => [
-      'base hook' => 'responsive_image',
-    ],
   ];
 }
 
@@ -87,13 +84,12 @@ function lazy_image_preprocess_image__lazy(&$variables) {
 /**
  * Implements hook_preprocess_HOOK() for responsive-image--lazy.html.twig.
  */
-function template_preprocess_responsive_image__lazy(&$variables) {
+function lazy_image_preprocess_responsive_image__lazy(&$variables) {
   $img = $variables['img_element'];
 
   // If outputting image tag only:
   if ($variables['output_image_tag']) {
     $variables['img_element']['#attributes']['data-lazy-srcset'] = $variables['sources'][0]['srcset'];
-    $variables['img_element']['#attributes']['class'][] = Helper::CSS_CLASS;
     unset($variables['img_element']['#attributes']['srcset']);
   }
   else {
@@ -102,10 +98,10 @@ function template_preprocess_responsive_image__lazy(&$variables) {
       $value->setAttribute('data-lazy-srcset', $value['srcset']);
       $value->removeAttribute('srcset');
     }
-
-    // Add JS CSS hook-class to picture tag.
-    $variables['attributes']['class'][] = Helper::CSS_CLASS;
   }
+
+  // Add JS CSS hook-class.
+  $variables['img_element']['#attributes']['class'][] = Helper::CSS_CLASS;
 
   $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
   $variables['img_element']['#uri'] = $variables['lazy_placeholder'];
