@@ -28,6 +28,8 @@ $build = [
   '#theme' => 'image',
   ...
   '#lazy_placeholder' => $placeholder_path,
-  '#pre_render' => ['Drupal\lazy_image\Helper', 'lazyImageConvertPreRender'],
+  '#pre_render' => [
+    ['Drupal\lazy_image\Helper', 'lazyImageConvertPreRender'],
+  ],
 ];
 ```
