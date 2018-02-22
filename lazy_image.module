@@ -100,6 +100,20 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
     }
   }
 
+  $fallback_style = \Drupal::entityTypeManager()
+    ->getStorage('responsive_image_style')
+    ->load($variables['responsive_image_style_id'])
+    ->getFallbackImageStyle();
+
+  // Use fallback image style's dimensions for image dimension attributes, to
+  // mitigate some content jumping.
+  $variables['img_element']['#attributes']['height'] = $variables['height'];
+  $variables['img_element']['#attributes']['width'] = $variables['width'];
+  \Drupal::entityTypeManager()
+    ->getStorage('image_style')
+    ->load($fallback_style)
+    ->transformDimensions($variables['img_element']['#attributes'], $variables['uri']);
+
   // Add JS CSS hook-class.
   $variables['img_element']['#attributes']['class'][] = Helper::CSS_CLASS;
 
