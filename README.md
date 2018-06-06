@@ -2,7 +2,7 @@
 
 Adds field formatters and theme hooks for rendering lazy images.
 
-This module changes `src` and  `srcset` attributes by prefixing `data-lazy-` to
+This module changes `src` and  `srcset` attributes by prefixing `data-` to
 them.
 
 This module contains:
@@ -12,7 +12,8 @@ This module contains:
 - `lazy_image_wrapper` theme hook
 - `Drupal\lazy_image\Helper` class
 - `lazy_placeholder_default` image style for placeholder image
-- JavaScript loader to load the images
+- Third-party JavaScript loader [lazysizes](https://github.com/aFarkas/lazysizes)
+to load the images
 
 ## Writing a render array
 

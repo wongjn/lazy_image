@@ -12,7 +12,7 @@ class Helper {
    *
    * @var string
    */
-  const CSS_CLASS = 'js-lazy-image';
+  const CSS_CLASS = 'lazyload';
 
   /**
    * The list of theme hooks that can be made lazy.

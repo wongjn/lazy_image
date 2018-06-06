@@ -71,14 +71,14 @@ function lazy_image_preprocess_image_style__lazy(&$variables) {
 function lazy_image_preprocess_image__lazy(&$variables) {
   foreach (['src', 'srcset'] as $attribute_name) {
     if (isset($variables['attributes'][$attribute_name])) {
-      $variables['attributes']["data-lazy-$attribute_name"] = $variables['attributes'][$attribute_name];
+      $variables['attributes']["data-$attribute_name"] = $variables['attributes'][$attribute_name];
       unset($variables['attributes'][$attribute_name]);
     }
   }
 
   $variables['attributes']['src'] = $variables['lazy_placeholder'];
-  $variables['attributes']['class'][] = 'js-lazy-image';
-  $variables['#attached']['library'][] = 'lazy_image/loader';
+  $variables['attributes']['class'][] = Helper::CSS_CLASS;
+  $variables['#attached']['library'][] = 'lazy_image/lazysizes';
 }
 
 /**
@@ -89,13 +89,13 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
 
   // If outputting image tag only:
   if ($variables['output_image_tag']) {
-    $variables['img_element']['#attributes']['data-lazy-srcset'] = $variables['sources'][0]['srcset'];
+    $variables['img_element']['#attributes']['data-srcset'] = $variables['sources'][0]['srcset'];
     unset($variables['img_element']['#attributes']['srcset']);
   }
   else {
     // Convert srcset attributes on source tags.
     foreach ($variables['sources'] as $value) {
-      $value->setAttribute('data-lazy-srcset', $value['srcset']);
+      $value->setAttribute('data-srcset', $value['srcset']);
       $value->removeAttribute('srcset');
     }
   }
@@ -117,9 +117,9 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
   // Add JS CSS hook-class.
   $variables['img_element']['#attributes']['class'][] = Helper::CSS_CLASS;
 
-  $variables['img_element']['#attributes']['data-lazy-src'] = $img['#uri'];
+  $variables['img_element']['#attributes']['data-src'] = $img['#uri'];
   $variables['img_element']['#uri'] = $variables['lazy_placeholder'];
-  $variables['#attached']['library'][] = 'lazy_image/loader';
+  $variables['#attached']['library'][] = 'lazy_image/lazysizes';
 }
 
 /**
@@ -146,7 +146,7 @@ function lazy_image_page_bottom(array &$page_bottom) {
   $page_bottom['lazy_image_noscript'] = [
     '#type' => 'html_tag',
     '#tag' => 'style',
-    '#value' => 'img[data-lazy-src],img[data-lazy-srcset]{display:none}',
+    '#value' => 'img[data-src],img[data-srcset]{display:none}',
     '#noscript' => TRUE,
   ];
 }
