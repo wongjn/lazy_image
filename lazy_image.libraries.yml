@@ -1,13 +1,12 @@
 lazysizes:
   remote: https://github.com/aFarkas/lazysizes
-  version: latest
-  header: true
+  version: 4.1.1
   license:
     name: MIT
     url: https://github.com/aFarkas/lazysizes/blob/gh-pages/LICENSE
     gpl-compatible: true
   js:
-    http://afarkas.github.io/lazysizes/lazysizes.min.js:
+    https://cdn.rawgit.com/aFarkas/lazysizes/4.1.1/lazysizes.min.js:
       type: external
       minified: true
       attributes:
