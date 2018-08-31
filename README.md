@@ -19,8 +19,9 @@ to load the images
 
 To write a render array for a lazy image, write a normal render array for a
 compatible theme hook (look in `Drupal\lazy_image\Helper::supportedThemeHooks`).
-Optionally add a path to an image as the value of `#lazy_placeholder` to use it
-as the image to be in-place before lazy loading happens. Finally, add
+Optionally add an image style name to generate a placeholder image (the image
+shown before the image is actually lazy-loaded) using the
+`#lazy_placeholder_style` render key. Finally, add
 `Drupal\lazy_image\Helper::lazyImageConvertPreRender()` as a value in the
 `#pre_render` key.
 
@@ -28,9 +29,14 @@ as the image to be in-place before lazy loading happens. Finally, add
 $build = [
   '#theme' => 'image',
   ...
-  '#lazy_placeholder' => $placeholder_path,
+  '#lazy_placeholder' => $placeholder_path, // Deprecated since 1.3.0
+  '#lazy_placeholder_style' => 'lazy_image_style',
   '#pre_render' => [
     ['Drupal\lazy_image\Helper', 'lazyImageConvertPreRender'],
   ],
 ];
 ```
+
+Note: there is a `#lazy_placeholder` render key for adding the URI to the
+placeholder image directly, however this is deprecated and is planed to be
+removed in `1.3.0`.
