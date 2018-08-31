@@ -41,7 +41,7 @@ function lazy_image_theme_registry_alter(&$theme_registry) {
 /**
  * Prepares variables for lazy image wrapper templates.
  *
- * Default template: lazy-image-wrappe.html.twig.
+ * Default template: lazy-image-wrapper.html.twig.
  *
  * @param array $variables
  *   An associative array containing:
