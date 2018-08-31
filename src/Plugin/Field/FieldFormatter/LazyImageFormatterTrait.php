@@ -54,7 +54,7 @@ trait LazyImageFormatterTrait {
       '#title' => $this->t('Classes'),
       '#type' => 'textfield',
       '#default_value' => $this->getSetting('classes'),
-      '#description' => $this->t('HTML classes to add to the &lt;img> element.')
+      '#description' => $this->t('HTML classes to add to the &lt;img> element.'),
     ];
 
     return $elements;
