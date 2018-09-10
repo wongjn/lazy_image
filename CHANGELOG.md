@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased]
 ------------
 
+[1.3.1] - 2018-09-10
+--------------------
+### Fixed
+- Fix placeholder image generation from image_style
+
 [1.3.0] - 2018-08-31
 --------------------
 ### Added
