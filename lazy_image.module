@@ -29,6 +29,9 @@ function lazy_image_theme_registry_alter(&$theme_registry) {
   $theme_registry['image_formatter__lazy']['variables']['lazy_placeholder_style'] = '';
   $theme_registry['image_style__lazy']['variables']['lazy_placeholder_style'] = '';
   $theme_registry['image__lazy']['variables']['lazy_placeholder_style'] = '';
+  // Used internally from lazy_image_preprocess_image_style__lazy() to give
+  // original source image to lazy_image_preprocess_image__lazy().
+  $theme_registry['image__lazy']['variables']['lazy_original_uri'] = '';
 
   // Deprecated placeholder image inclusion technique.
   $theme_registry['responsive_image_formatter__lazy']['variables']['lazy_placeholder'] = '';
@@ -73,6 +76,8 @@ function lazy_image_preprocess_image_formatter__lazy(&$variables) {
 function lazy_image_preprocess_image_style__lazy(&$variables) {
   $variables['image']['#theme'] .= '__lazy';
   $variables['image']['#lazy_placeholder_style'] = $variables['lazy_placeholder_style'];
+  // Give source image file URI for placeholder URL generation.
+  $variables['image']['#lazy_original_uri'] = $variables['uri'];
 
   // Deprecated placeholder image inclusion technique.
   $variables['image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
@@ -100,7 +105,22 @@ function lazy_image_preprocess_image__lazy(&$variables) {
     ->load($variables['lazy_placeholder_style']);
 
   if ($placeholder_style) {
-    $variables['attributes']['src'] = $placeholder_style->buildUrl($variables['uri']);
+    $supported_uri = $placeholder_style->supportsUri($variables['uri']);
+    $original_uri = $variables['lazy_original_uri'];
+
+    if ($supported_uri || $original_uri) {
+      $variables['attributes']['src'] = $supported_uri
+        ? $placeholder_style->buildUrl($variables['uri'])
+        : $placeholder_style->buildUrl($original_uri);
+    }
+    else {
+      \Drupal::logger('lazy_image')
+        ->warning('Could not apply placeholder style @style to @uri because the style does not support the URI scheme. Include a supported URI using <code>#lazy_original_uri</code>.', [
+          '@style' => $placeholder_style->label(),
+          '@uri' => $variables['uri'],
+        ]);
+    }
+
     \Drupal::service('renderer')->addCacheableDependency($variables, $placeholder_style);
   }
   // Deprecated placeholder image inclusion technique.
