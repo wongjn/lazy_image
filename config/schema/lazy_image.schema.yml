@@ -1,0 +1,24 @@
+# Schema for configuration files of the Lazy Image module.
+
+field.formatter.settings.lazy_image:
+  type: field.formatter.settings.image
+  label: 'Lazy Image field display format settings'
+  mapping:
+    lazy_placeholder_style:
+      type: string
+      label: 'Placeholder image style'
+    classes:
+      type: string
+      label: Classes
+
+field.formatter.settings.lazy_responsive_image:
+  type: field.formatter.settings.responsive_image
+  type: lazy_image.lazy_image_formatter_base
+  label: 'Lazy Responsive Image field display format settings'
+  mapping:
+    lazy_placeholder_style:
+      type: string
+      label: 'Placeholder image style'
+    classes:
+      type: string
+      label: Classes
