@@ -38,11 +38,13 @@ class Helper {
    */
   public static function lazyImageConvertPreRender(array $element) {
     $compatible_themeable = isset($element['#theme']) && in_array($element['#theme'], self::$supportedThemeHooks);
-    if ($compatible_themeable) {
+    $already_processed = isset($element['#lazy_image_processed']);
+
+    if ($compatible_themeable && !$already_processed) {
       $fallback = $element;
 
       // Prevents recursive loop.
-      $fallback['#render_children'] = TRUE;
+      $fallback['#lazy_image_processed'] = TRUE;
       // Add lazy image wrapper to handle no-javascript fallback markup.
       $element['#theme_wrappers'][] = 'lazy_image_wrapper';
       $element['#no_js_fallback'] = $fallback;
