@@ -109,9 +109,10 @@ function lazy_image_preprocess_image__lazy(&$variables) {
     $original_uri = $variables['lazy_original_uri'];
 
     if ($supported_uri || $original_uri) {
-      $variables['attributes']['src'] = $supported_uri
-        ? $placeholder_style->buildUrl($variables['uri'])
-        : $placeholder_style->buildUrl($original_uri);
+      $variables['attributes']['src'] = Helper::encodeImage(
+        $supported_uri ? $variables['uri'] : $original_uri,
+        $placeholder_style
+      );
     }
     else {
       \Drupal::logger('lazy_image')
@@ -174,7 +175,7 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
   // tag if provided.
   $placeholder_style = $image_style_storage->load($variables['lazy_placeholder_style']);
   if ($placeholder_style) {
-    $variables['img_element']['#uri'] = $placeholder_style->buildUrl($variables['uri']);
+    $variables['img_element']['#uri'] = Helper::encodeImage($variables['uri'], $placeholder_style);
     \Drupal::service('renderer')->addCacheableDependency($variables, $placeholder_style);
   }
   // Deprecated placeholder image inclusion technique.

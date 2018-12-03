@@ -2,6 +2,8 @@
 
 namespace Drupal\lazy_image;
 
+use Drupal\image\ImageStyleInterface;
+
 /**
  * Utility class helper for the lazy_image module.
  */
@@ -54,6 +56,49 @@ class Helper {
     }
 
     return $element;
+  }
+
+  /**
+   * Creates a base64-encoded image as a string.
+   *
+   * @param string $uri
+   *   The image file URI.
+   * @param \Drupal\image\ImageStyleInterface $image_style
+   *   The image style object to use.
+   *
+   * @return string
+   *   The base64-encoded image.
+   */
+  public static function encodeImage($uri, ImageStyleInterface $image_style) {
+    $derivative_uri = $image_style->buildUri($uri);
+    $cache_key = "lazy_image:base64_encode:$derivative_uri";
+
+    $cache_bin = \Drupal::cache('render');
+    $cache = $cache_bin->get($cache_key);
+    $data = '';
+
+    if ($cache) {
+      $data = $cache->data;
+    }
+    else {
+      if (!file_exists($derivative_uri)) {
+        $image_style->createDerivative($uri, $derivative_uri);
+      }
+
+      $data = [
+        'data' => base64_encode(file_get_contents($derivative_uri)),
+        'type' => pathinfo($derivative_uri, PATHINFO_EXTENSION),
+      ];
+
+      $cache_bin->set(
+        $cache_key,
+        $data,
+        $image_style->getCacheMaxAge(),
+        $image_style->getCacheTags()
+      );
+    }
+
+    return "data:image/$data[type];base64,$data[data]";
   }
 
 }
