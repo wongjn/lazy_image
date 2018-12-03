@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased]
 ------------
 
+[1.3.5] - 2018-12-03
+--------------------
+### Changed
+- Encode and embed lazy image placeholders
+
 [1.3.4] - 2018-10-25
 --------------------
 ### Fixed
