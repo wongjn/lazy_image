@@ -6,8 +6,10 @@ lazysizes:
     url: https://github.com/aFarkas/lazysizes/blob/gh-pages/LICENSE
     gpl-compatible: true
   js:
-    https://cdn.rawgit.com/aFarkas/lazysizes/4.1.1/lazysizes.min.js:
+    https://cdn.jsdelivr.net/gh/aFarkas/lazysizes@4.1.1/lazysizes.min.js:
       type: external
       minified: true
       attributes:
         async: true
+        crossorigin: anonymous
+        integrity: 'sha384-zHckgubl1WdMPdFvdO7EGCvv1nOAx/XEwgEnCV2xt75WeUihy9jpGH3fhUfGwBFa'
