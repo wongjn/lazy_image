@@ -2,6 +2,7 @@
 
 namespace Drupal\lazy_image\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -9,6 +10,41 @@ use Drupal\Core\Form\FormStateInterface;
  * Common method implementations for lazy image formatters.
  */
 trait LazyImageFormatterTrait {
+
+  /**
+   * The image style storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $imageStyleStorage;
+
+  /**
+   * Gets the image style storage.
+   *
+   * @return \Drupal\Core\Entity\EntityStorageInterface
+   *   The image style storage.
+   */
+  protected function getImageStyleStorage() {
+    if (!$this->imageStyleStorage) {
+      $this->imageStyleStorage = \Drupal::service('entity_type.manager')->getStorage('image_style');
+    }
+
+    return $this->imageStyleStorage;
+  }
+
+  /**
+   * Sets the image style storage to use.
+   *
+   * @param \Drupal\Core\Entity\EntityStorageInterface $image_style_storage
+   *   The image style storage.
+   *
+   * @return $this
+   */
+  public function setImageStyleStorage(EntityStorageInterface $image_style_storage) {
+    $this->imageStyleStorage = $image_style_storage;
+
+    return $this;
+  }
 
   /**
    * Defines the default settings for this plugin.
@@ -110,6 +146,43 @@ trait LazyImageFormatterTrait {
     }
 
     return $elements;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    $dependencies = parent::calculateDependencies();
+    $style_id = $this->getSetting('lazy_placeholder_style');
+    /** @var \Drupal\image\ImageStyleInterface $style */
+    if ($style_id && $style = $this->getImageStyleStorage()->load($style_id)) {
+      // If this formatter uses a valid lazy image placeholder style, add
+      // the image style configuration entity as a dependency of this formatter.
+      $dependencies[$style->getConfigDependencyKey()][] = $style->getConfigDependencyName();
+    }
+    return $dependencies;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function onDependencyRemoval(array $dependencies) {
+    $changed = parent::onDependencyRemoval($dependencies);
+    $style_id = $this->getSetting('lazy_placeholder_style');
+    /** @var \Drupal\image\ImageStyleInterface $style */
+    if ($style_id && $style = $this->getImageStyleStorage()->load($style_id)) {
+      if (!empty($dependencies[$style->getConfigDependencyKey()][$style->getConfigDependencyName()])) {
+        $replacement_id = $this->imageStyleStorage->getReplacementId($style_id);
+        // If a valid replacement has been provided in the storage, replace the
+        // image style with the replacement and signal that the formatter plugin
+        // settings were updated.
+        if ($replacement_id && $this->getImageStyleStorage()->load($replacement_id)) {
+          $this->setSetting('lazy_placeholder_style', $replacement_id);
+          $changed = TRUE;
+        }
+      }
+    }
+    return $changed;
   }
 
 }
