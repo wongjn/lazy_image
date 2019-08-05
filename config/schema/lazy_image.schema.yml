@@ -13,7 +13,6 @@ field.formatter.settings.lazy_image:
 
 field.formatter.settings.lazy_responsive_image:
   type: field.formatter.settings.responsive_image
-  type: lazy_image.lazy_image_formatter_base
   label: 'Lazy Responsive Image field display format settings'
   mapping:
     lazy_placeholder_style:
