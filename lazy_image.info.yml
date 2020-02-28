@@ -3,5 +3,5 @@ description: Adds formatters and theme functions for lazy images.
 type: module
 core: 8.x
 dependencies:
-  - image
-  - responsive_image
+  - drupal:image
+  - drupal:responsive_image
