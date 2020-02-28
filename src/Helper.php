@@ -39,6 +39,12 @@ class Helper {
    *   The modified render array.
    */
   public static function lazyImageConvertPreRender(array $element) {
+    // Skip coversion for media embed preview — frontend assets do not get
+    // added to the parent context to facilitate lazy loading.
+    if (\Drupal::routeMatch()->getRouteName() == 'media.filter.preview') {
+      return $element;
+    }
+
     $compatible_themeable = isset($element['#theme']) && in_array($element['#theme'], self::$supportedThemeHooks);
     $already_processed = isset($element['#lazy_image_processed']);
 
