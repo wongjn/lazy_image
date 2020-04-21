@@ -190,7 +190,7 @@ function lazy_image_page_bottom(array &$page_bottom) {
   $page_bottom['lazy_image_noscript'] = [
     '#type' => 'html_tag',
     '#tag' => 'style',
-    '#value' => 'img[data-src],img[data-srcset]{display:none}',
+    '#value' => 'img.lazyload{display:none}',
     '#noscript' => TRUE,
   ];
 }
