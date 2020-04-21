@@ -18,7 +18,7 @@ to load the images
 ## Writing a render array
 
 To write a render array for a lazy image, write a normal render array for a
-compatible theme hook (look in `Drupal\lazy_image\Helper::supportedThemeHooks`).
+compatible theme hook (look in `Drupal\lazy_image\Helper::SUPPORTED_THEME_HOOKS`).
 Optionally add an image style name to generate a placeholder image (the image
 shown before the image is actually lazy-loaded) using the
 `#lazy_placeholder_style` render key. Finally, add

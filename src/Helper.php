@@ -21,7 +21,7 @@ class Helper {
    *
    * @var string[]
    */
-  protected static $supportedThemeHooks = [
+  const SUPPORTED_THEME_HOOKS = [
     'image',
     'image_style',
     'image_formatter',
@@ -45,7 +45,7 @@ class Helper {
       return $element;
     }
 
-    $compatible_themeable = isset($element['#theme']) && in_array($element['#theme'], self::$supportedThemeHooks);
+    $compatible_themeable = isset($element['#theme']) && in_array($element['#theme'], self::SUPPORTED_THEME_HOOKS);
     $already_processed = isset($element['#lazy_image_processed']);
 
     if ($compatible_themeable && !$already_processed) {

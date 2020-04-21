@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Add helper class tests
 
+### Changed
+- Expose supported theme hooks as public constant
+
 ### Removed
 - Remove `#lazy_placeholder` render array property
 
