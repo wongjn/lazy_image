@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Add helper class tests
+- Add tests for formatter trait
 
 ### Changed
 - Expose supported theme hooks as public constant
