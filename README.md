@@ -29,14 +29,9 @@ shown before the image is actually lazy-loaded) using the
 $build = [
   '#theme' => 'image',
   ...
-  '#lazy_placeholder' => $placeholder_path, // Deprecated since 1.3.0
   '#lazy_placeholder_style' => 'lazy_image_style',
   '#pre_render' => [
     ['Drupal\lazy_image\Helper', 'lazyImageConvertPreRender'],
   ],
 ];
 ```
-
-Note: there is a `#lazy_placeholder` render key for adding the URI to the
-placeholder image directly, however this is deprecated and is planed to be
-removed in `1.3.0`.

@@ -32,13 +32,6 @@ function lazy_image_theme_registry_alter(&$theme_registry) {
   // Used internally from lazy_image_preprocess_image_style__lazy() to give
   // original source image to lazy_image_preprocess_image__lazy().
   $theme_registry['image__lazy']['variables']['lazy_original_uri'] = '';
-
-  // Deprecated placeholder image inclusion technique.
-  $theme_registry['responsive_image_formatter__lazy']['variables']['lazy_placeholder'] = '';
-  $theme_registry['responsive_image__lazy']['variables']['lazy_placeholder'] = '';
-  $theme_registry['image_formatter__lazy']['variables']['lazy_placeholder'] = '';
-  $theme_registry['image_style__lazy']['variables']['lazy_placeholder'] = '';
-  $theme_registry['image__lazy']['variables']['lazy_placeholder'] = '';
 }
 
 /**
@@ -65,9 +58,6 @@ function template_preprocess_lazy_image_wrapper(array &$variables) {
 function lazy_image_preprocess_image_formatter__lazy(&$variables) {
   $variables['image']['#theme'] .= '__lazy';
   $variables['image']['#lazy_placeholder_style'] = $variables['lazy_placeholder_style'];
-
-  // Deprecated placeholder image inclusion technique.
-  $variables['image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
 }
 
 /**
@@ -78,9 +68,6 @@ function lazy_image_preprocess_image_style__lazy(&$variables) {
   $variables['image']['#lazy_placeholder_style'] = $variables['lazy_placeholder_style'];
   // Give source image file URI for placeholder URL generation.
   $variables['image']['#lazy_original_uri'] = $variables['uri'];
-
-  // Deprecated placeholder image inclusion technique.
-  $variables['image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
 }
 
 /**
@@ -100,10 +87,9 @@ function lazy_image_preprocess_image__lazy(&$variables) {
 
   // Set URL of placeholder image from the provided image style to the image
   // tag if provided.
-  $placeholder_style = \Drupal::entityTypeManager()
-    ->getStorage('image_style')
-    ->load($variables['lazy_placeholder_style']);
-
+  $placeholder_style = $variables['lazy_placeholder_style']
+    ? \Drupal::entityTypeManager()->getStorage('image_style')->load($variables['lazy_placeholder_style'])
+    : NULL;
   if ($placeholder_style) {
     $supported_uri = $placeholder_style->supportsUri($variables['uri']);
     $original_uri = $variables['lazy_original_uri'];
@@ -123,10 +109,6 @@ function lazy_image_preprocess_image__lazy(&$variables) {
     }
 
     \Drupal::service('renderer')->addCacheableDependency($variables, $placeholder_style);
-  }
-  // Deprecated placeholder image inclusion technique.
-  elseif ($variables['lazy_placeholder']) {
-    $variables['attributes']['src'] = $variables['lazy_placeholder'];
   }
 }
 
@@ -173,14 +155,12 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
 
   // Set URL of placeholder image from the provided image style to the image
   // tag if provided.
-  $placeholder_style = $image_style_storage->load($variables['lazy_placeholder_style']);
+  $placeholder_style = $variables['lazy_placeholder_style']
+    ? $image_style_storage->load($variables['lazy_placeholder_style'])
+    : NULL;
   if ($placeholder_style) {
     $variables['img_element']['#uri'] = Helper::encodeImage($variables['uri'], $placeholder_style);
     \Drupal::service('renderer')->addCacheableDependency($variables, $placeholder_style);
-  }
-  // Deprecated placeholder image inclusion technique.
-  elseif ($variables['lazy_placeholder']) {
-    $variables['attributes']['src'] = $variables['lazy_placeholder'];
   }
 }
 
@@ -197,9 +177,6 @@ function lazy_image_preprocess_responsive_image_formatter__lazy(&$variables) {
   }
 
   $variables['responsive_image']['#lazy_placeholder_style'] = $variables['lazy_placeholder_style'];
-
-  // Deprecated placeholder image inclusion technique.
-  $variables['responsive_image']['#lazy_placeholder'] = $variables['lazy_placeholder'];
 }
 
 /**
