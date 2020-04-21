@@ -2,12 +2,22 @@
 
 namespace Drupal\lazy_image;
 
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\image\ImageStyleInterface;
 
 /**
  * Utility class helper for the lazy_image module.
  */
-class Helper {
+class Helper implements TrustedCallbackInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return [
+      'lazyImageConvertPreRender',
+    ];
+  }
 
   /**
    * CSS class for JavaScript to hook into.

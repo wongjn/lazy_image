@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Expose supported theme hooks as public constant
 
+### Security
+- Implement `TrustedCallbackInterface` for `#pre_render`
+
 ### Removed
 - Remove `#lazy_placeholder` render array property
 

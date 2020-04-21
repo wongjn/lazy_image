@@ -1,8 +1,4 @@
 name: Lazy Image
 description: Adds formatters and theme functions for lazy images.
 type: module
-core: 8.x
-core_version_requirement: ^8 || ^9
-dependencies:
-  - drupal:image
-  - drupal:responsive_image
+core_version_requirement: ^8.8 || ^9
