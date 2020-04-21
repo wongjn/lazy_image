@@ -5,6 +5,7 @@
  * Contains hooks and functions for lazy image module.
  */
 
+use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\lazy_image\Helper;
 
 /**
@@ -52,7 +53,11 @@ function template_preprocess_lazy_image_wrapper(array &$variables) {
 
   // Map variables.
   $variables['image'] = $element['#children'];
-  $variables['no_js_fallback'] = $element['#no_js_fallback'];
+
+  // No needed for no-JavaScript fallback for AJAX requests since AJAX
+  // guarantees JavaScript is running.
+  $is_ajax = \Drupal::request()->request->has(AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER);
+  $variables['no_js_fallback'] = $is_ajax ? '' : $element['#no_js_fallback'];
 }
 
 /**

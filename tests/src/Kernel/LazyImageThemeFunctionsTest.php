@@ -2,12 +2,14 @@
 
 namespace Drupal\Tests\lazy_image\Kernel;
 
+use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\TestFileCreationTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tests lazy image theme functions.
@@ -172,6 +174,15 @@ class LazyImageThemeFunctionsTest extends KernelTestBase {
     $this->setRawContent($this->renderer->renderRoot($build));
     $this->assertCount(2, $this->cssSelect('span'));
     $this->assertCount(1, $this->cssSelect('noscript > #fallback'), 'Fallback markup rendered inside noscript tags.');
+
+    // Create a fake AJAX request.
+    $request = Request::create('/', 'POST', [AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER => 1]);
+    $this->container->get('request_stack')->push($request);
+
+    $build = $base_build;
+    $this->setRawContent($this->renderer->renderRoot($build));
+    $this->assertCount(1, $this->cssSelect('span'));
+    $this->assertCount(0, $this->cssSelect('noscript'), 'No noscript tags rendered in AJAX responses.');
   }
 
 }

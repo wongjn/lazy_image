@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 - Remove `#lazy_placeholder` render array property
+- Remove noscript fallbacks for AJAX responses
 
 ## [1.3.8] - 2020-02-28
 ### Added
