@@ -39,8 +39,8 @@ class Helper {
    *   The modified render array.
    */
   public static function lazyImageConvertPreRender(array $element) {
-    // Skip coversion for media embed preview — frontend assets do not get
-    // added to the parent context to facilitate lazy loading.
+    // Skip conversion for media embed preview — frontend assets may not get
+    // added to the parent frame/document to facilitate lazy loading.
     if (\Drupal::routeMatch()->getRouteName() == 'media.filter.preview') {
       return $element;
     }
