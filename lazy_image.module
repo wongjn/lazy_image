@@ -116,9 +116,6 @@ function lazy_image_preprocess_image__lazy(&$variables) {
  * Implements hook_preprocess_HOOK() for responsive-image--lazy.html.twig.
  */
 function lazy_image_preprocess_responsive_image__lazy(&$variables) {
-  $img = $variables['img_element'];
-  $image_style_storage = \Drupal::entityTypeManager()->getStorage('image_style');
-
   // If outputting image tag only:
   if ($variables['output_image_tag']) {
     $variables['img_element']['#attributes']['data-srcset'] = $variables['sources'][0]['srcset'];
@@ -137,6 +134,8 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
     ->load($variables['responsive_image_style_id'])
     ->getFallbackImageStyle();
 
+  $image_style_storage = \Drupal::entityTypeManager()->getStorage('image_style');
+
   // Use fallback image style's dimensions for image dimension attributes, to
   // mitigate some content jumping.
   $variables['img_element']['#attributes']['height'] = $variables['height'];
@@ -150,7 +149,7 @@ function lazy_image_preprocess_responsive_image__lazy(&$variables) {
   $variables['#attached']['library'][] = 'lazy_image/lazysizes';
 
   // Move original URI to data- attribute.
-  $variables['img_element']['#attributes']['data-src'] = $img['#uri'];
+  $variables['img_element']['#attributes']['data-src'] = $variables['img_element']['#uri'];
   $variables['img_element']['#uri'] = '';
 
   // Set URL of placeholder image from the provided image style to the image
