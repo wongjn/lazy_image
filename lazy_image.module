@@ -20,18 +20,21 @@ function lazy_image_theme() {
 
 /**
  * Implements hook_theme_registry_alter().
- *
- * Adds 'placeholder' variable to lazy image theme hooks.
  */
 function lazy_image_theme_registry_alter(&$theme_registry) {
-  $theme_registry['responsive_image_formatter__lazy']['variables']['lazy_placeholder_style'] = '';
-  $theme_registry['responsive_image__lazy']['variables']['lazy_placeholder_style'] = '';
-  $theme_registry['image_formatter__lazy']['variables']['lazy_placeholder_style'] = '';
-  $theme_registry['image_style__lazy']['variables']['lazy_placeholder_style'] = '';
-  $theme_registry['image__lazy']['variables']['lazy_placeholder_style'] = '';
-  // Used internally from lazy_image_preprocess_image_style__lazy() to give
-  // original source image to lazy_image_preprocess_image__lazy().
-  $theme_registry['image__lazy']['variables']['lazy_original_uri'] = '';
+  // Adds 'placeholder' variable to lazy image theme hooks.
+  foreach (Helper::SUPPORTED_THEME_HOOKS as $base_hook) {
+    $hook = "${base_hook}__lazy";
+    if (isset($theme_registry[$hook])) {
+      $theme_registry[$hook]['variables']['lazy_placeholder_style'] = '';
+    }
+  }
+
+  if ($theme_registry['image__lazy']) {
+    // Used internally from lazy_image_preprocess_image_style__lazy() to give
+    // original source image to lazy_image_preprocess_image__lazy().
+    $theme_registry['image__lazy']['variables']['lazy_original_uri'] = '';
+  }
 }
 
 /**
